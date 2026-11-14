@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sahil080805.github.io/northbound-logistics/sitemap.xml

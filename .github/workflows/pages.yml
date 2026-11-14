@@ -1,0 +1,36 @@
+# Optional: deploy to GitHub Pages with GitHub Actions instead of "Deploy from a branch".
+#
+# To use it:
+#   1. Repo -> Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+#   2. Uncomment the `push` trigger below (so every push to main redeploys), commit, push.
+# If you deploy "from a branch" (the default in the README) you can ignore or delete this file.
+name: Deploy to GitHub Pages
+
+on:
+  # push:
+  #   branches: [main]
+  workflow_dispatch:       # lets you run it manually from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
